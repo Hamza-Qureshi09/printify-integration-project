@@ -1,0 +1,8 @@
+Hi, our website is blockybites.com. We are looking to develop an e-commerce / merchandise section on our website using nextjs. Please contact us if your team is interested in working with us.
+
+
+What would be the estimated total cost for a 14 item shop as discussed via the call?
+-> $500
+
+
+We are looking to integrate a print-on-demand service into our shop so users can seamlessly purchase items from our store and the products be fulfilled through a service such as printify / printful. Is this something that is possible?

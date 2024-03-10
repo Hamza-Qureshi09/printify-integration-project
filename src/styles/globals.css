@@ -1,0 +1,325 @@
+@import url("https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700;800&family=Open+Sans&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "K2D", sans-serif !important;
+  background-color: #100f0d;
+  color: #fff;
+  scroll-behavior: smooth !important;
+}
+
+.ff_open_sans {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+/* =================== CUSTOM SCROLL-BAR ============================= */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffbb00;
+  border-radius: 5px;
+}
+
+.gradient-border {
+  background-clip: text;
+  -webkit-background-clip: text;
+  border-image: linear-gradient(180deg,
+      rgba(255, 187, 0, 0) 0.16%,
+      rgba(255, 187, 0, 0.42) 44%,
+      rgba(0, 0, 0, 0) 100%,
+      rgba(255, 187, 0, 0) 100%);
+  border-image-slice: 1;
+}
+
+/* =================== common class ====================== */
+.bg_size_full {
+  background-size: 100% 100% !important;
+}
+
+/* ==================== RODMAP ================================ */
+.rodmap_border_left {
+  background: linear-gradient(272.2deg,
+      rgba(255, 187, 0, 0.4) 1.99%,
+      rgba(255, 187, 0, 0) 91.55%) border-box;
+}
+
+.rodmap_border_right {
+  background: linear-gradient(90deg,
+      rgba(255, 187, 0, 0.4) 1.99%,
+      rgba(255, 187, 0, 0) 91.55%) border-box;
+}
+
+.roadmap_para_ellipsis {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  white-space: pre-wrap;
+}
+
+/* ==================== HERO BACKGROUND ============================ */
+.bg_size_hero {
+  background-size: 500px;
+}
+
+/* SLIDER */
+
+.slick-track {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.slick-slide {
+  height: inherit !important;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  padding-bottom: 0px !important;
+  padding-top: 66px;
+}
+
+.slick-slide>div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100% !important;
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+.shadow-custom {
+  background-color: #ffbb00;
+  filter: blur(200px);
+}
+
+.shop-card-shadow:hover {
+  box-shadow: 0px 4px 15px 3px #ffbb0030;
+}
+
+/* =============================  NAV ANIMTE ======================================== */
+.mobile-view-animate {
+  opacity: 0;
+}
+
+.mobile-view-animate:nth-child(1) {
+  animation: mymove 0.9s;
+  animation-delay: 0.2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(2) {
+  animation: mymove 0.9s;
+  animation-delay: 0.4s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(3) {
+  animation: mymove 0.9s;
+  animation-delay: 0.7s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(4) {
+  animation: mymove 0.9s;
+  animation-delay: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(5) {
+  animation: mymove 0.9s;
+  animation-delay: 1.3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(6) {
+  animation: mymove 0.9s;
+  animation-delay: 1.5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(7) {
+  animation: mymove 0.9s;
+  animation-delay: 1.7s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(8) {
+  animation: mymove 0.9s;
+  animation-delay: 1.9s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.mobile-view-animate:nth-child(9) {
+  animation: mymove 0.9s;
+  animation-delay: 1.9s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes mymove {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================ THE BLOCK ========================================== */
+.hover_card_parent:hover .hover_card_text {
+  color: #ffbb00;
+}
+
+.shop_dropdown option {
+  background-color: black !important;
+  color: #ffbb00;
+}
+
+/* ==========================   BACK TO TOP   ======================================= */
+.animate_back_to_top {
+  animation: backToTopAnimation 1s infinite alternate ease-in-out;
+}
+
+@keyframes backToTopAnimation {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ================================ Preloader ===================================== */
+
+.preloader_animation {
+  animation: preloaderAnimation 1.5s infinite alternate-reverse;
+}
+
+.overflow_hidden {
+  overflow: hidden !important;
+}
+
+@keyframes preloaderAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* =============================== MEDIA QUIRES ================================= */
+@media (max-width: 991.98px) {
+  .bg_size_hero {
+    background-size: 500px;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .slick-slide {
+    padding-top: 50px;
+  }
+
+  .rodmap_border_left {
+    background: linear-gradient(90deg,
+        rgba(255, 187, 0, 0.4) 1.99%,
+        rgba(255, 187, 0, 0) 91.55%) border-box;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.minted-modal-slider-wrapper .slick-slide {
+  padding-top: 0 !important;
+}
+
+.flip_card {
+  perspective: 1000px;
+}
+
+.flip_card_inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip_card_trigger:hover~.flip_card_inner {
+  transform: rotateY(180deg);
+}
+
+.flip_card_front,
+.flip_card_back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip_card_back {
+  transform: rotateY(180deg);
+}
+
+
+/* Merchandise Shop */
+@layer utilities {
+  .backdrop-blur-md:hover {
+    backdrop-filter: blur(40px);
+    /* You can adjust the blur radius as needed */
+  }
+}
+
+.image-container {
+  position: relative;
+}
+
+.image {
+  transition: opacity 0.3s ease;
+}
+
+.image-container .image:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.image-container.flipped .image:nth-child(1) {
+  opacity: 0;
+}
+
+.image-container.flipped .image:nth-child(2) {
+  opacity: 1;
+}
+
+/* CSS for flipped class */
+.flipped {
+  transform: rotateY(-180deg);
+  transition: transform 1s;
+  animation-delay: 0.5s;
+}
+
+.backtooriginal {
+  transform: rotateY(0deg);
+  transition: transform 1s;
+}
+
+.description>p>span {
+  color: white !important;
+}
