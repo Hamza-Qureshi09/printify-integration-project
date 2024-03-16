@@ -38,9 +38,6 @@ const ExploreShop = ({}) => {
   const searchParams = useSearchParams();
   const totalProducts = searchParams.get("total");
   const [queryEnabled, setQueryEnabled] = useState(false);
-  const [flippedItems, setFlippedItems] = useState(
-    Array(merchandiseShop.length).fill(false)
-  );
 
   // queries
   const {
@@ -58,24 +55,87 @@ const ExploreShop = ({}) => {
     enabled: queryEnabled, // Initially disable fetching
   });
 
+  const [flippedItems, setFlippedItems] = useState(
+    Array(productsData?.data.length).fill(false)
+  );
+  const [activeImages, setactiveImages] = useState([]);
+  const [images, setimages] = useState([]);
+
+  // const handleMouseEnter = (index) => {
+  //   setFlippedItems((prevFlippedItems) => {
+  //     const newFlippedItems = [...prevFlippedItems];
+  //     newFlippedItems[index] = true;
+  //     return newFlippedItems;
+  //   });
+  // };
+
+  // const handleMouseLeave = (index) => {
+  //   setFlippedItems((prevFlippedItems) => {
+  //     const newFlippedItems = [...prevFlippedItems];
+  //     newFlippedItems[index] = false;
+  //     return newFlippedItems;
+  //   });
+  // };
+
   const handleMouseEnter = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = true;
       return newFlippedItems;
+    });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 3 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
     });
   };
 
   const handleMouseLeave = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = false;
       return newFlippedItems;
+    });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 2 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
     });
   };
 
   React.useEffect(() => {
-    // Refetch data if params become available after initial render
+    if (productsData?.data) {
+      setFlippedItems(Array(productsData?.data.length).fill(false));
+      const itemImageUrls = productsData.data.map((item) => {
+        const imagesUrlArray = item?.images?.map((val) => val?.src);
+        return imagesUrlArray || [];
+      });
+      setimages(itemImageUrls);
+
+      if (itemImageUrls?.length >= 1) {
+        const activeImagesUrls = itemImageUrls?.map((items) => {
+          const findActiveImage = items.find(
+            (val, index) => index === 2 && val
+          );
+          return findActiveImage;
+        });
+        setactiveImages(activeImagesUrls);
+      }
+    }
+  }, [productsData?.data]);
+
+  // fetch data when params become available after initial render
+  React.useEffect(() => {
     if (totalProducts) {
       setQueryEnabled(true);
     }
@@ -91,6 +151,10 @@ const ExploreShop = ({}) => {
         <div className="h-4 bg-gray-300 rounded-md w-3/5"></div>
       </div>
     );
+  }
+
+  if (productsError) {
+    return <div>{productsError?.message}</div>;
   }
 
   return (
@@ -120,6 +184,7 @@ const ExploreShop = ({}) => {
                       item={item}
                       index={index}
                       router={router}
+                      activeImages={activeImages}
                       flippedItems={flippedItems}
                       handleMouseEnter={handleMouseEnter}
                       handleMouseLeave={handleMouseLeave}

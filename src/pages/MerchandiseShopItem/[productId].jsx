@@ -51,6 +51,12 @@ const MerchandiseShopItem = (params) => {
   const [modalOpen, setmodalOpen] = useState(false);
   const [SelectedVarient, setSelectedVarient] = useState({});
 
+  const formatPriceFunc = (price) => {
+    return parseFloat(
+      price.toFixed(2).replace(/(\d)(?=(\d{2})+(?!\d))/g, "$1.")
+    );
+  };
+
   // queries
   const {
     isLoading,
@@ -82,7 +88,10 @@ const MerchandiseShopItem = (params) => {
     }
 
     const payload = {
-      varient: SelectedVarient,
+      varient: {
+        ...SelectedVarient,
+        price: formatPriceFunc(SelectedVarient["price"]),
+      },
       productId: productDetails?.id,
       title: productDetails?.title,
     };
@@ -146,26 +155,70 @@ const MerchandiseShopItem = (params) => {
       return newFlipImage;
     });
   };
-
+  // states
   const [flippedItems, setFlippedItems] = useState(
-    Array(merchandiseShop.length).fill(false)
+    Array(productsData?.data.length).fill(false)
   );
+  const [activeImages, setactiveImages] = useState([]);
+  const [images, setimages] = useState([]);
 
   const handleMouseEnter = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = true;
       return newFlippedItems;
+    });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 3 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
     });
   };
 
   const handleMouseLeave = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = false;
       return newFlippedItems;
     });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 2 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
+    });
   };
+
+  React.useEffect(() => {
+    if (productsData?.data) {
+      setFlippedItems(Array(productsData?.data.length).fill(false));
+      const itemImageUrls = productsData.data.map((item) => {
+        const imagesUrlArray = item?.images?.map((val) => val?.src);
+        return imagesUrlArray || [];
+      });
+      setimages(itemImageUrls);
+
+      if (itemImageUrls?.length >= 1) {
+        const activeImagesUrls = itemImageUrls?.map((items) => {
+          const findActiveImage = items.find(
+            (val, index) => index === 2 && val
+          );
+          return findActiveImage;
+        });
+        setactiveImages(activeImagesUrls);
+      }
+    }
+  }, [productsData?.data]);
+
   React.useEffect(() => {
     const productItem = localStorage.getItem("product");
     setproductDetails(JSON.parse(productItem));
@@ -310,7 +363,7 @@ const MerchandiseShopItem = (params) => {
                       <div>{SelectedVarient?.title}</div>
                       <div className="flex flex-row gap-1">
                         <p>Price:</p>
-                        <span>{SelectedVarient?.price}</span>
+                        <span>{formatPriceFunc(SelectedVarient?.price)} $</span>
                       </div>
                     </div>
                     <div className="flex flex-col">
@@ -389,6 +442,7 @@ const MerchandiseShopItem = (params) => {
                               item={item}
                               index={index}
                               router={router}
+                              activeImages={activeImages}
                               flippedItems={flippedItems}
                               handleMouseEnter={handleMouseEnter}
                               handleMouseLeave={handleMouseLeave}
@@ -434,7 +488,6 @@ const ProviderVarient = ({
 }) => {
   const [varients, setVarients] = React.useState([]);
   React.useEffect(() => {
-    const sizes = [14, 15, 16, 17, 18, 19];
     productDetails?.variants?.forEach((val) => {
       if (val?.options[1].toString() === itemSize) {
         setVarients((preVal) => {
@@ -507,6 +560,11 @@ const ProviderVarient = ({
                 <tbody className="bg-white divide-y divide-gray-200">
                   {varients?.length >= 1
                     ? varients?.map((val, index) => {
+                        const formattedPrice = parseFloat(
+                          val?.price
+                            .toFixed(2)
+                            .replace(/(\d)(?=(\d{2})+(?!\d))/g, "$1.")
+                        );
                         return (
                           <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -532,7 +590,9 @@ const ProviderVarient = ({
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {val?.price}.00 USD
+                                {formattedPrice
+                                  ? `${formattedPrice} USD`
+                                  : "N/A"}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { MdOutlineFlipCameraAndroid } from "react-icons/md";
@@ -7,10 +7,23 @@ const ProductCard = ({
   item,
   index,
   router,
+  activeImages,
   flippedItems,
   handleMouseEnter,
   handleMouseLeave,
 }) => {
+  // const [flippedItems, setFlippedItems] = useState(
+  //   Array(merchandiseShop.length).fill(false)
+  // );
+  // const [images, setimages] = useState([]);
+  // const [activeImage, setactiveImage] = useState("");
+
+  // React.useEffect(() => {
+  //   const imagesUrlArray = item?.images?.map((val) => val?.src);
+  //   setimages(imagesUrlArray || []);
+  //   setactiveImage(imagesUrlArray?.[2]);
+  // }, []);
+  // console.log(images, activeImage);
   return (
     <div
       className="w-full md:w-1/3 lg:w-[24%] h-[27rem] flex flex-col gap-4 bg-[#18150E] rounded-xl
@@ -50,13 +63,16 @@ hover:shadow-[#ffbb00] px-4 py-6
         <div
           className={`${flippedItems[index] ? "flipped" : "backtooriginal"} `}
         >
-          <Image
-            src={item?.images[0]?.src}
-            width="800"
-            height="400"
-            alt="merchandise-1"
-            className={`object-cover md:object-contain md:object-center`}
-          />
+          {activeImages?.length >= 1 && (
+            <Image
+              priority={true}
+              src={activeImages[index]}
+              width="800"
+              height="400"
+              alt="merchandise-1"
+              className={`object-cover md:object-contain md:object-center`}
+            />
+          )}
         </div>
       </div>
 
@@ -90,10 +106,7 @@ hover:text-[#FFBB00]"
   cursor-pointer mt-6
 "
       >
-        <a
-          href={`/MerchandiseShopItem/${item?.id}`}
-          className=""
-        >
+        <a href={`/MerchandiseShopItem/${item?.id}`} className="">
           <span
             onClick={() => {
               localStorage.setItem("product", JSON.stringify(item));

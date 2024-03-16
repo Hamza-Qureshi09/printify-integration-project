@@ -43,11 +43,6 @@ const GetPrintifyProducts = async () => {
 const MerchandiseShop = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  // const [products, setProducts] = useState([]);
-  // const [Loading, setLoading] = useState(false);
-  const [flippedItems, setFlippedItems] = useState(
-    Array(merchandiseShop.length).fill(false)
-  );
 
   // queries
   const {
@@ -57,10 +52,16 @@ const MerchandiseShop = (props) => {
   } = useQuery({
     queryKey: ["products"],
     queryFn: GetPrintifyProducts,
-    staleTime: 10000, // default infinity (means aty hi data stale hoje ga isly hr bar new request ja rhi hai cache se data nhi ara isly isko time dedo ke itni der tk ye data stale nhi krna)
+    staleTime: 10000,
     refetchOnWindowFocus: false,
   });
 
+  const [flippedItems, setFlippedItems] = useState(
+    Array(productsData?.data.length).fill(false)
+  );
+  const [activeImages, setactiveImages] = useState([]);
+  const [images, setimages] = useState([]);
+  
   const { isConnected, address } = useAccount();
   const { open } = useWeb3Modal();
   const { merchandiseRef } = useGlobalInfoProvider();
@@ -118,24 +119,64 @@ const MerchandiseShop = (props) => {
 
   const handleMouseEnter = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = true;
       return newFlippedItems;
+    });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 3 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
     });
   };
 
   const handleMouseLeave = (index) => {
     setFlippedItems((prevFlippedItems) => {
-      const newFlippedItems = [...prevFlippedItems];
+      const newFlippedItems = prevFlippedItems.slice();
       newFlippedItems[index] = false;
       return newFlippedItems;
     });
+    const activeImagesUrls = images?.map((items) => {
+      const FlippedImage = items.find((val, index) => index === 2 && val);
+      return FlippedImage;
+    });
+
+    setactiveImages((prevActiveImages) => {
+      const newFlippedImages = prevActiveImages.slice();
+      newFlippedImages[index] = activeImagesUrls[index];
+      return newFlippedImages;
+    });
   };
+
+  React.useEffect(() => {
+    if (productsData?.data) {
+      setFlippedItems(Array(productsData?.data.length).fill(false));
+      const itemImageUrls = productsData.data.map((item) => {
+        const imagesUrlArray = item?.images?.map((val) => val?.src);
+        return imagesUrlArray || [];
+      });
+      setimages(itemImageUrls);
+
+      if (itemImageUrls?.length >= 1) {
+        const activeImagesUrls = itemImageUrls?.map((items) => {
+          const findActiveImage = items.find(
+            (val, index) => index === 2 && val
+          );
+          return findActiveImage;
+        });
+        setactiveImages(activeImagesUrls);
+      }
+    }
+  }, [productsData?.data]);
 
   if (productsError) {
     return <div>{productsError?.message}</div>;
   }
-
   return (
     <div
       id="merchandise"
@@ -143,13 +184,13 @@ const MerchandiseShop = (props) => {
       className="xl:pt-[150px] lg:pt-[130px] pt-[58px] relative
       "
     >
-      <Image
+      {/* <Image
         className="absolute top-[-50px] end-0 w-[30%] h-[1580px]"
         width="1700"
         height="980"
         src="/assets/images/svg/shop-wave.svg"
         alt="wave-img"
-      />
+      /> */}
       <div className="container xl:max-w-[1140px] 2xl:max-w-[1320px] mx-auto px-3 lg:px-[40px] xl:px-0 relative z-10">
         <h3
           data-aos="fade-right"
@@ -176,6 +217,7 @@ const MerchandiseShop = (props) => {
                     item={item}
                     index={index}
                     router={router}
+                    activeImages={activeImages}
                     flippedItems={flippedItems}
                     handleMouseEnter={handleMouseEnter}
                     handleMouseLeave={handleMouseLeave}
